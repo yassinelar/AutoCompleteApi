@@ -1,6 +1,6 @@
 # AutoCompleteApi
 
-<h2>Abstract</h2>
+<h2>Overview</h2>
 
 The objective of this repository is to create an <b> autoComplete API </b> that given a user input query, provides suggested queries, based on the search history stored in a csv file and the number of times the queries were typed.
 
@@ -13,6 +13,17 @@ The first one consists in storing all the queries in a Map (text : count). Then,
 The second method consists in using a prefix tree (trie). After storing the different queries in a Map (text : count), we loop over the Map to insert each query sentence in the tree. 
 The root node is empty and each node is defined by a <em> hashMap children </em> and an <em> integer endOfSentence </em> to tell whether we have already a complete sentence at this node or not. The insertion is done character by character. Once it is inserted, we set the <em> endOfSentence </em> attribute of the last node to the number of times the query was typed (count Value).
 Given an input query (prefix), the search is done letter by letter accross the tree which allows which speeds up the search and allows you to eliminate certain branches each time you move forward.
+
+<h2>Complexity:</h2>  
+N : max query length
+M : size of query list data
+
+
+|               | Time  | Memory |  
+|---------------|-------|--------|
+| naive         | O(M)  | O(MN)  |   
+| tree (insert) | O(MN) | O(MN)  | 
+| tree (search) | O(N)  |  cte   | 
 
 <h2>Results </h2>
 
