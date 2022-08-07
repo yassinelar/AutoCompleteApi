@@ -1,11 +1,12 @@
 package com.example.searchEngine;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.annotation.PostConstruct;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,8 +21,7 @@ import java.util.logging.Logger;
 @RestController
 public class SearchEngineApplication {
 	private static Map<String, Integer> queries = new HashMap();
-
-	public static PrefixTree t = new PrefixTree();
+	public static PrefixTree trie = new PrefixTree();
 
 	public static void main(String[] args) {
 		SpringApplication application = new SpringApplication(SearchEngineApplication.class);
@@ -33,7 +33,7 @@ public class SearchEngineApplication {
 		String line = "";
 		Logger logger = Logger.getLogger("SearchEngineApplication");
 		try {
-			BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\33695\\Downloads\\history.csv"));
+			BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\33695\\Downloads\\history.csv"));  //read csv file
 			int i = 0;
 			while ((line = br.readLine()) != null) {
 				if (i != 0) {
@@ -42,10 +42,10 @@ public class SearchEngineApplication {
 				}
 				i += 1;
 			}
-			List<String> finalList = new ArrayList<> (queries.keySet());
-			List<Integer> values = new ArrayList<> (queries.values());
+			List<String> finalList = new ArrayList<> (queries.keySet());  // queries text
+			List<Integer> values = new ArrayList<> (queries.values());  // count values
 			for (int j = 0; j < finalList.size()-1; j++) {
-				t.addWordTree(finalList.get(j), values.get(j));
+				trie.addSentenceTree(finalList.get(j), values.get(j));  //insert sentence into the tree
 			}
 			logger.info("tree built successfully");
 		} catch(IOException e) {
@@ -55,20 +55,17 @@ public class SearchEngineApplication {
 
 	@GetMapping("/input")
 	// We can pass the name of the url param we want as an argument to the RequestParam annotation.
-	// The value will be stored in the annotated variable
 	public List echo(@RequestParam (name = "text") String inputText) {
-		// The response will be "Echo: " followed by the param that was passed in
-		String input = inputText;
+		// get the input text from the url http://localhost:8080/input?text={input}
 		try {
-			Map<String, Integer> results= t.search(input);
+			Map<String, Integer> results= trie.search(inputText);
 			if (results.size() == 0) {
-				System.out.println (0);
+				return (new ArrayList<>());
 			} else {
 				Map<String, Integer> sorted = results.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).collect(toMap(e -> e.getKey(), e -> e.getValue(), (e1, e2) -> e2, LinkedHashMap::new));
 				int numberOfValues = Math.min (results.size() , 10);
 				return (new ArrayList<>(sorted.keySet()).subList(0, numberOfValues));
 			}
-
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
