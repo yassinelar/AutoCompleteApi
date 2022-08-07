@@ -21,6 +21,8 @@ import java.util.logging.Logger;
 public class SearchEngineApplication {
 	private static Map<String, Integer> queries = new HashMap();
 
+	public static PrefixTree t = new PrefixTree();
+
 	public static void main(String[] args) {
 		SpringApplication application = new SpringApplication(SearchEngineApplication.class);
 		application.run(args);
@@ -40,7 +42,12 @@ public class SearchEngineApplication {
 				}
 				i += 1;
 			}
-			logger.info("tree built succefully");
+			List<String> finalList = new ArrayList<> (queries.keySet());
+			List<Integer> values = new ArrayList<> (queries.values());
+			for (int j = 0; j < finalList.size()-1; j++) {
+				t.addWordTree(finalList.get(j), values.get(j));
+			}
+			logger.info("tree built successfully");
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -52,13 +59,8 @@ public class SearchEngineApplication {
 	public List echo(@RequestParam (name = "text") String inputText) {
 		// The response will be "Echo: " followed by the param that was passed in
 		String input = inputText;
-		Map<String, Integer> results = new HashMap();
 		try {
-			for (Map.Entry<String, Integer> req : queries.entrySet()) {
-				if (req.getKey().startsWith(input)) {
-					results.put(req.getKey(), req.getValue());
-				}
-			}
+			Map<String, Integer> results= t.search(input);
 			if (results.size() == 0) {
 				System.out.println (0);
 			} else {
@@ -66,6 +68,7 @@ public class SearchEngineApplication {
 				int numberOfValues = Math.min (results.size() , 10);
 				return (new ArrayList<>(sorted.keySet()).subList(0, numberOfValues));
 			}
+
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
