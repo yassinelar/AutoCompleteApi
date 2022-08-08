@@ -9,7 +9,7 @@ public class util {
         Matcher matcher = pattern.matcher(sentence);
         boolean matchFound = matcher.find();
         if (matchFound) {
-            return matcher.start();
+            return matcher.start();  // get the position of the last number appearing in the sentence
         }
         return -1;
     }
