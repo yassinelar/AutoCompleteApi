@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 public class SearchEngineApplication {
 	private static Map<String, Integer> queries = new HashMap();
 	public static PrefixTree trie = new PrefixTree();
+	private static ResourceBundle resource = ResourceBundle.getBundle("application");
 
 	public static void main(String[] args) {
 		SpringApplication application = new SpringApplication(SearchEngineApplication.class);
@@ -33,7 +34,8 @@ public class SearchEngineApplication {
 		String line = "";
 		Logger logger = Logger.getLogger("SearchEngineApplication");
 		try {
-			BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\33695\\Downloads\\history.csv"));  //read csv file
+			String fileName = resource.getString("FILENAME");
+			BufferedReader br = new BufferedReader(new FileReader(fileName));  //read csv file
 			int i = 0;
 			while ((line = br.readLine()) != null) {
 				if (i != 0) {
@@ -63,7 +65,7 @@ public class SearchEngineApplication {
 				return (new ArrayList<>());
 			} else {
 				Map<String, Integer> sorted = results.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).collect(toMap(e -> e.getKey(), e -> e.getValue(), (e1, e2) -> e2, LinkedHashMap::new));
-				int numberOfValues = Math.min (results.size() , 10);
+				int numberOfValues = Math.min (results.size(), 10);
 				return (new ArrayList<>(sorted.keySet()).subList(0, numberOfValues));
 			}
 		} catch(Exception e) {
@@ -72,4 +74,3 @@ public class SearchEngineApplication {
 		return null;
 	}
 }
-

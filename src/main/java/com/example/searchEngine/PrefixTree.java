@@ -9,7 +9,7 @@ public class PrefixTree {
         root = new PrefixTreeNode();
     }
 
-    public void addWordTree(String s, Integer count) {
+    public void addSentenceTree(String s, Integer count) {   //insert sentence into the tree character by character. The last node contains the count value (number of time the query was typed
         PrefixTreeNode current = root;
         for (int i = 0; i < s.length(); i++) {
             char ch = s.charAt(i);
@@ -20,37 +20,32 @@ public class PrefixTree {
             }
             current = node;
         }
-        current.endOfWord = count;
+        current.endOfSentence = count;
     }
 
-    public Map<String, Integer> search(String prefix){
-        Map<String, Integer> autoCompWords = new HashMap();
-
+    public Map<String, Integer> search(String prefix) {
+        Map<String, Integer> completeSentences = new HashMap();
         PrefixTreeNode currentNode = root;
-
         for(int i = 0; i < prefix.length(); i++) {
             currentNode = currentNode.children.get(prefix.charAt(i));
             if(currentNode==null) {
-                return autoCompWords;
+                return completeSentences;
             }
         }
-
-        searchWords(currentNode, autoCompWords, prefix);
-        return autoCompWords;
+        searchSentence(currentNode, completeSentences, prefix);
+        return completeSentences;
     }
 
-    private void searchWords(PrefixTreeNode currentNode, Map<String, Integer> autoCompWords, String word) {
+    private void searchSentence(PrefixTreeNode currentNode, Map<String, Integer> autoCompWords, String word) {
         if(currentNode == null) {
             return;
         }
-
-        if(currentNode.endOfWord != -1) {
-            autoCompWords.put(word, currentNode.endOfWord);
+        if(currentNode.endOfSentence != -1) {
+            autoCompWords.put(word, currentNode.endOfSentence);
         }
-
         Map<Character,PrefixTreeNode> map = currentNode.children;
         for(Character c:map.keySet()) {
-            searchWords(map.get(c),autoCompWords, word+String.valueOf(c));
+            searchSentence(map.get(c), autoCompWords, word+String.valueOf(c));
         }
     }
 }
