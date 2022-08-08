@@ -53,4 +53,6 @@ The second method may be improved by storing the different sentences in the tree
 
 We can also define a new rule to prioritize and manage the case where our result list of suggested queries contains queries with the same number of time typed.
 
-To implement an <em> approximate suggestion </em> logic by measuring the similarity between the input query and the queries stored and defining a threshold to determine whether the words can be considered as similar or not 
+To implement an <em> approximate suggestion </em> logic by measuring the similarity between the input query and the queries stored and defining a threshold to determine whether the words can be considered as similar or not.
+
+To start the api, clone the project and change the fileName in src/main/java/com/example/searchEngine/PrefixTreeNode.java to the csv file path.
