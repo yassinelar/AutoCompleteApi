@@ -31,7 +31,7 @@ To get the request input in the url, i use the @GetMapping annotation.
 
 <h2>Methods comparaison </h2>
 
-Then, I compared the two methods performances by sending a certain number of requests and calculating each time the time to execute all of them
+Then, I compared the two methods performances by sending a certain number of requests and calculating each time the time to execute all of them. The simulation is done with python.
 
 The experience is repeated using 5, 10, 100, 200, 500, 1000, 2000, 3000, 5000 Samples.
 
@@ -55,4 +55,4 @@ We can also define a new rule to prioritize and manage the case where our result
 
 To implement an <em> approximate suggestion </em> logic by measuring the similarity between the input query and the queries stored and defining a threshold to determine whether the words can be considered as similar or not.
 
-To start the api, clone the project and change the fileName in src/main/java/com/example/searchEngine/PrefixTreeNode.java to the csv file path.
+To start the api, clone the project and change the fileName in src/main/resources/application.properties with your csv file path then run the project.
